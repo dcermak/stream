@@ -2,15 +2,16 @@ $:.unshift File.join(File.dirname(__FILE__), 'lib')
 require 'stream'
 
 Gem::Specification.new do |s|
-  s.name    = 'Stream'
+  s.name    = 'stream'
   s.version = STREAM_VERSION
-  s.summary = "Stream - Extended External Iterators"
+  s.summary = "stream - Extended External Iterators"
   s.description = "Module Stream defines an interface for external iterators."
 
   #### Dependencies and requirements.
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'yard'
+  s.add_development_dependency 'rdoc'
   s.add_development_dependency 'test-unit'
 
   #### Which files are to be included in this gem?
@@ -32,7 +33,6 @@ Gem::Specification.new do |s|
 
   #### Documentation and testing.
 
-  s.has_rdoc = true
   s.extra_rdoc_files = ['README.rdoc']
   s.rdoc_options += [
       '--title', s.summary,

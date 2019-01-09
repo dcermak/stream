@@ -1,4 +1,4 @@
-STREAM_VERSION = "0.5.1"
+STREAM_VERSION = "0.5.2"
 
 ##
 # Module Stream defines an interface for an external Iterator which
@@ -183,7 +183,7 @@ module Stream
 
 	  # Create a new IntervalStream with upper bound _stop_. stop - 1 is the last
 	  # element. By default _stop_ is zero which means that the stream is empty.
-	  def initialize (stop=0)
+	  def initialize(stop=0)
 	    @stop = stop - 1
 	    set_to_begin
 	  end
@@ -195,7 +195,7 @@ module Stream
 	  def set_to_begin; @pos = -1; end
 
 	  # Increment the upper bound by incr.
-	  def increment_stop (incr=1); @stop += incr; end
+	  def increment_stop(incr=1); @stop += incr; end
 
 	  def basic_forward; @pos += 1; end
 	  def basic_backward;  @pos -= 1; @pos + 1; end
@@ -214,7 +214,7 @@ module Stream
 	  attr_reader :wrapped_stream
 
 	  # Create a new WrappedStream wrapping the Stream _otherStream_.
-	  def initialize (otherStream)
+	  def initialize(otherStream)
 	    @wrapped_stream = otherStream
 	  end
 
@@ -243,7 +243,7 @@ module Stream
 
 	  # Create a new FilteredStream wrapping _otherStream_ and selecting all its
 	  # elements which satisfy the condition defined by the block_filter_.
-	  def initialize (otherStream, &filter)
+	  def initialize(otherStream, &filter)
 	    super otherStream
 	    @filter = filter
 	    @positionHolder = IntervalStream.new
@@ -311,7 +311,7 @@ module Stream
 	  # Create a reversing wrapper for the reversable stream _otherStream_. If
 	  # _otherStream_ does not support backward moving a NotImplementedError is
 	  # signaled on the first backward move.
-	  def initialize (otherStream)
+	  def initialize(otherStream)
 	    super otherStream
 	    set_to_begin
 	  end
@@ -345,7 +345,7 @@ module Stream
 	  ##
 	  # Creates a new MappedStream wrapping _otherStream_ which calls the block
 	  # _mapping_ on each move.
-	  def initialize (otherStream, &mapping)
+	  def initialize(otherStream, &mapping)
 	    super otherStream
 	    @mapping = mapping
 	  end
@@ -371,7 +371,7 @@ module Stream
 
 	  # Creates a new ConcatenatedStream wrapping the stream of streams
 	  # _streamOfStreams_.
-	  def initialize (streamOfStreams)
+	  def initialize(streamOfStreams)
 	    super
 	    set_to_begin
 	  end
@@ -379,46 +379,47 @@ module Stream
 	  # If the current stream is at end, than at_end? has to look ahead to find a
 	  # non empty in the stream of streams, which than gets the current stream.
 	  def at_end?
- 	    @currentStream.at_end? and
-		    begin
-		      until streamOfStreams.at_end?
-			      dir, @dirOfLastMove = @dirOfLastMove, :forward
-			      s = streamOfStreams.basic_forward
-			      # if last move was backwards, then @currentStream is
-			      # equivalent to s. Move to next stream.
-			      next if dir == :backward
-			      s.set_to_begin
-			      if s.at_end?			# empty stream?
-			        next				# skip it
-			      else
-			        @currentStream = s
-			        return false		# found non empty stream
-			      end
-		      end
-		      reachedBoundary		# sets @dirOfLastMove and @currentStream
-		    end
+ 	    if @currentStream.at_end?
+        return false
+      else      
+		    until streamOfStreams.at_end?
+			    dir, @dirOfLastMove = @dirOfLastMove, :forward
+			    s = streamOfStreams.basic_forward
+			    # if last move was backwards, then @currentStream is
+			    # equivalent to s. Move to next stream.
+			    next if dir == :backward
+			    s.set_to_begin
+			    if s.at_end?          # empty stream?
+			      next                # skip it
+			    else
+			      @currentStream = s
+			      return false        # found non empty stream
+			    end
+		    end                     # until
+		    reachedBoundary         # sets @dirOfLastMove and @currentStream
+      end
     end
 
 	  # Same as at_end? the other way round.
     def at_beginning?
-	    # same algorithm as at_end? the other way round. Could we do it
-	    # with metaprogramming?
- 	    @currentStream.at_beginning? and
-		    begin
-		      until streamOfStreams.at_beginning?
-			      dir, @dirOfLastMove = @dirOfLastMove, :backward
-			      s = streamOfStreams.basic_backward
-			      next if dir == :forward
-			      s.set_to_end
-			      if s.at_beginning?
-			        next
-			      else
-			        @currentStream = s
-			        return false
-			      end
-		      end
-		      reachedBoundary
+	    # same algorithm as at_end? the other way round.
+ 	    if @currentStream.at_beginning?
+        return false
+      else
+		    until streamOfStreams.at_beginning?
+			    dir, @dirOfLastMove = @dirOfLastMove, :backward
+			    s = streamOfStreams.basic_backward
+			    next if dir == :forward
+			    s.set_to_end
+			    if s.at_beginning?
+			      next
+			    else
+			      @currentStream = s
+			      return false
+			    end
 		    end
+		    reachedBoundary
+		  end
   	end
 
 	  def set_to_begin; super; reachedBoundary end
@@ -473,7 +474,7 @@ module Stream
 	  #
 	  # If a block is given to new, than it is called with the new ImplicitStream
 	  # stream as parameter letting the client overwriting the default blocks.
-	  def initialize (otherStream=nil)
+	  def initialize(otherStream=nil)
 	    if otherStream
 		    @wrapped_stream = otherStream
 		    @at_beginning_proc = proc {otherStream.at_beginning?}
@@ -515,7 +516,7 @@ module Stream
   ##
   # Return a Stream::FilteredStream which iterates over all my elements
   # satisfying the condition specified  by the block.
-  def filtered (&block); FilteredStream.new(self,&block); end
+  def filtered(&block); FilteredStream.new(self,&block); end
 
   # Create a Stream::ReversedStream wrapper on self.
   def reverse; ReversedStream.new self; end
@@ -523,7 +524,7 @@ module Stream
   # Create a Stream::MappedStream wrapper on self. Instead of returning the
   # stream element on each move, the value of calling _mapping_ is returned
   # instead. See Stream::MappedStream for examples.
-  def collect (&mapping); MappedStream.new(self, &mapping); end
+  def collect(&mapping); MappedStream.new(self, &mapping); end
 
   # Create a Stream::ConcatenatedStream on self, which must be a stream of
   # streams.
@@ -536,14 +537,14 @@ module Stream
   #    [i,-i].create_stream
   #  }.
   #  s.to_a ==> [1, -1, 2, -2, 3, -3]
-  def concatenate_collected (&mapping); self.collect(&mapping).concatenate; end
+  def concatenate_collected(&mapping); self.collect(&mapping).concatenate; end
 
   # Create a Stream::ConcatenatedStream by concatenatating the receiver and
   # _otherStream_
   #
   #  (%w(a b c).create_stream + [4,5].create_stream).to_a
   #  ==> ["a", "b", "c", 4, 5]
-  def + (otherStream)
+  def +(otherStream)
 	  [self, otherStream].create_stream.concatenate
   end
 
@@ -551,7 +552,7 @@ module Stream
   # one or more basic methods of the receiver. As an example the method
   # remove_first uses #modify to create an ImplicitStream which filters the
   # first element away.
-  def modify (&block); ImplicitStream.new(self, &block); end
+  def modify(&block); ImplicitStream.new(self, &block); end
 
   # Returns a Stream::ImplicitStream wrapping a Stream::FilteredStream, which
   # eliminates the first element of the receiver.

@@ -3,3 +3,5 @@
 /stream
 .yardoc
 Gemfile.lock
+/*.iml
+/.rakeTasks

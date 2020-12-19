@@ -168,5 +168,5 @@ root privileges to install.
 == Other Stuff
 
 Author:: Horst Duchene
-License:: Copyright (c) 2001, 2013, 2016 Horst Duchene
+License:: Copyright (c) 2001, 2013, 2016, 2020 Horst Duchene
 Released under the same license as Ruby

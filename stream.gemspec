@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     'examples/**/*',
     'Gemfile',
     'README.rdoc',
+    'LICENSE',
     'Rakefile'
   ]
 
@@ -33,6 +34,7 @@ Gem::Specification.new do |s|
 
   s.require_path = 'lib'
   s.autorequire  = 'stream'
+  s.license  = 'ruby'
 
   #### Documentation and testing.
 

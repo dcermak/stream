@@ -9,6 +9,8 @@ rvm:
   - 2.3.0
   - 2.4
   - 2.5
+  - 2.6
+  - 2.7
   - ruby-head
   - jruby
   - jruby-head
@@ -20,6 +22,3 @@ matrix:
   allow_failures:
       - rvm: ruby-head
       - rvm: jruby-head
-addons:
-  code_climate:
-    repo_token: 9b56bc5e14a34f1925548f4e0c61b9afe6b6d6da6227738218c4a99c88c10c65

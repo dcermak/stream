@@ -1,4 +1,4 @@
-{<img src="https://secure.travis-ci.org/monora/stream.png?branch=master" alt="Build Status" />}[https://travis-ci.org/monora/stream]
+{<img src="https://github.com/monora/stream/actions/workflows/ruby.yml/badge.svg" alt="Build Status" />}[https://github.com/monora/stream/actions/workflows/ruby.yml]
 
 = Extended External Iterators (forward and backward)
 
